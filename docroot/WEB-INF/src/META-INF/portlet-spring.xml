@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.alacrity.openingdesign.messageportlet.model.service.SKQuestionLocalService" class="com.alacrity.openingdesign.messageportlet.model.service.impl.SKQuestionLocalServiceImpl" />
+	<bean id="com.alacrity.openingdesign.messageportlet.model.service.SKQuestionLocalServiceUtil" class="com.alacrity.openingdesign.messageportlet.model.service.SKQuestionLocalServiceUtil">
+		<property name="service" ref="com.alacrity.openingdesign.messageportlet.model.service.SKQuestionLocalService" />
+	</bean>
+	<bean id="com.alacrity.openingdesign.messageportlet.model.service.persistence.SKQuestionPersistence" class="com.alacrity.openingdesign.messageportlet.model.service.persistence.SKQuestionPersistenceImpl" parent="basePersistence" />
+</beans>
