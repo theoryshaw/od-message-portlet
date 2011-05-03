@@ -38,4 +38,6 @@ public interface ModeOwner {
 
 	Integer getServerTimeOffset();
 
+	Long getCurrentUserId();
+
 }

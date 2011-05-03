@@ -75,7 +75,7 @@ SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy hh:mm");
 if (questions.size()==0){
     out.print("No threads exist");
 } else { %>
-<table>
+<table class=threadsTable>
     <tr>
         <th>Title</th>
         <th>User</th>
@@ -107,8 +107,7 @@ for (SKQuestion cur : questions){
 }
 %>
 
-
-<br><br>
+<div class="navigation">
 <form id = "<portlet:namespace />changePage"
 action="<%=pageURL %>"
 method="post">
@@ -155,9 +154,9 @@ if (PageNavigationManager.isThereNextPages(start,end,maxItems)){
 <input type=hidden name=page value=<%=currentPage %> />
 <input type=hidden name=lastPage value=<%=lastPage %> />
 </form>
-<br>
-<br>
+</div>
+<div class="serverTime">
 Server Time: <%=format.format(new Date().getTime()+(Integer.parseInt(serverTime)*60*60*1000)) %>
-
+</div>
 
 
