@@ -71,7 +71,7 @@ public enum Mode {
 		public final void doMode(RenderRequest renderRequest,
 				RenderResponse renderResponse, ModeOwner owner) throws IOException, PortletException,
 				SystemException, PortalException {
-
+			System.out.println("##########################################");
 			setup(renderRequest,renderResponse,owner);
 			
 			try {
@@ -84,10 +84,12 @@ public enum Mode {
 				owner.saveNewThread(action.getParameter(TITLE_FORM_PARAMETER_NAME), action
 						.getParameter(URL_FORM_PARAMETER_NAME), 0L);
 				
-				Mode.DEFAULT.doMode(renderRequest, renderResponse, owner);
 			} catch (Exception w) {
 				renderRequest.setAttribute(MESSAGE_PARAMETER_NAME, w.getMessage());
+				w.printStackTrace();
 			}
+			
+			Mode.DEFAULT.doMode(renderRequest, renderResponse, owner);
 			
 		}
 		
@@ -107,7 +109,38 @@ public enum Mode {
 
 			PortletURL awnserAction = renderResponse.createActionURL();
 			awnserAction.setParameter(ACTION, ADD_AWNSER_TO_THREAD_ACTION);
+			awnserAction.setParameter(VIEW_TAB_PARAMETER_NAME, VIEW_MY_AWNSERS_ACTION);
 			renderRequest.setAttribute(AWNSER_ACTION_URL_PARAMETER_NAME, awnserAction.toString());
+			
+			
+			
+			PortletURL viewThreadQuestionAction = renderResponse.createActionURL();
+			viewThreadQuestionAction.setParameter(ACTION, VIEW_THREAD_ACTION);
+			viewThreadQuestionAction.setParameter(THREAD_ID_PARAMETER_NAME, action.getParameter(THREAD_ID_PARAMETER_NAME));
+			viewThreadQuestionAction.setParameter(VIEW_TAB_PARAMETER_NAME, VIEW_QUESTION_ACTION);
+			renderRequest.setAttribute(VIEW_QUESTION_URL_PARAMETER_NAME, viewThreadQuestionAction.toString());
+			
+			
+			
+			PortletURL viewThreadAwnsersAction = renderResponse.createActionURL();
+			viewThreadAwnsersAction.setParameter(ACTION, VIEW_THREAD_ACTION);
+			viewThreadAwnsersAction.setParameter(THREAD_ID_PARAMETER_NAME, action.getParameter(THREAD_ID_PARAMETER_NAME));
+			viewThreadAwnsersAction.setParameter(VIEW_TAB_PARAMETER_NAME, VIEW_AWNSERS_ACTION);
+			renderRequest.setAttribute(VIEW_AWNSERS_URL_PARAMETER_NAME, viewThreadAwnsersAction.toString());
+			
+			
+			PortletURL viewThreadMyAwnsersAction = renderResponse.createActionURL();
+			viewThreadMyAwnsersAction.setParameter(ACTION, VIEW_THREAD_ACTION);
+			viewThreadMyAwnsersAction.setParameter(THREAD_ID_PARAMETER_NAME, action.getParameter(THREAD_ID_PARAMETER_NAME));
+			viewThreadMyAwnsersAction.setParameter(VIEW_TAB_PARAMETER_NAME, VIEW_MY_AWNSERS_ACTION);
+			renderRequest.setAttribute(VIEW_MY_AWNSERS_URL_PARAMETER_NAME, viewThreadMyAwnsersAction.toString());
+			
+			
+			if (action.getParameter(VIEW_TAB_PARAMETER_NAME)!=null){
+				renderRequest.setAttribute(VIEW_TAB_PARAMETER_NAME, action.getParameter(VIEW_TAB_PARAMETER_NAME));
+			} else {
+				renderRequest.setAttribute(VIEW_TAB_PARAMETER_NAME, VIEW_QUESTION_ACTION);
+			}
 
 			owner.include(owner.getViewThreadURL(), renderRequest, renderResponse);
 			
@@ -177,6 +210,8 @@ public enum Mode {
 	public static final String CURRENT_PAGE_NUMBER_FORM_PARAMETER_NAME = "page";
 	public static final String LAST_PAGE_NUMBER_FORM_PARAMETER_NAME = "lastPage";
 	
+	public static final String CURRENT_USER_ID_PARAMETER_NAME="currentUserId";
+	
 	public static final String RETURN_ACTION_PARAMTER_NAME = "returnAction";
 	public static final String VIEW_THREAD_URL_OARAMETER_NAME = "viewThreadURL";
 	public static final String PAGE_END_PARAMETER_NAME = "pageEnd";
@@ -200,6 +235,13 @@ public enum Mode {
 	public static final String CHANGE_PAGE_NUMBER_ACTION = "changePage";
 	
 	
+	public static final String VIEW_TAB_PARAMETER_NAME="tab";
+	public static final String VIEW_QUESTION_ACTION = "viewQuestion";
+	public static final String VIEW_QUESTION_URL_PARAMETER_NAME="viewQuestionUrl";
+	public static final String VIEW_AWNSERS_ACTION = "viewAwnsers";
+	public static final String VIEW_AWNSERS_URL_PARAMETER_NAME="viewAwnsersUrl";
+	public static final String VIEW_MY_AWNSERS_ACTION = "viewMyAwnser";
+	public static final String VIEW_MY_AWNSERS_URL_PARAMETER_NAME="viewMyAwnserUrl";
 	
 	public static final String FIRST_PAGE_BUTTON_TEXT="<<";
 	public static final String PREVIOUS_PAGE_BUTTON_TEXT="<";
@@ -226,6 +268,9 @@ public enum Mode {
 		renderRequest.setAttribute(USER_TIME_ZONE_OFFSET_PARAM_NAME, ((Integer) owner.getUserTimeOffset())
 				.toString());
 		renderRequest.setAttribute(SERVER_TIME_ZONE_OFFSET_PARAM_NAME, ((Integer) owner.getServerTimeOffset())
+				.toString());
+		
+		renderRequest.setAttribute(CURRENT_USER_ID_PARAMETER_NAME, ((Long) owner.getCurrentUserId())
 				.toString());
 	}
 	

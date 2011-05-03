@@ -2,6 +2,8 @@ package com.alacrity.openingdesign.messageportlet;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.TimeZone;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
@@ -46,7 +48,7 @@ public class Messageportlet extends GenericPortlet implements ModeOwner {
 	
 	private User user;
 	private int userTimeOffset=0;
-	private int serverTimeOffset=0;//TimeZone.getDefault().getRawOffset();
+	private int serverTimeOffset=TimeZone.getDefault().getRawOffset();
 
 	public void doView(RenderRequest renderRequest,
 			RenderResponse renderResponse) throws IOException, PortletException {
@@ -54,8 +56,13 @@ public class Messageportlet extends GenericPortlet implements ModeOwner {
 		access = SKQuestionLocalServiceUtil.getService();
 
 		try {
-			user = UserLocalServiceUtil.getUserById(Integer.parseInt(renderRequest.getRemoteUser()));
-			userTimeOffset=user.getTimeZone().getRawOffset();
+			try{
+				user = UserLocalServiceUtil.getUserById(Integer.parseInt(renderRequest.getRemoteUser()));
+				userTimeOffset=user.getTimeZone().getRawOffset();
+				TimeZone.getDefault().getRawOffset();
+			} catch (NumberFormatException e){
+				userTimeOffset=TimeZone.getDefault().getRawOffset();
+			}
 			
 			
 			mode.doMode(renderRequest, renderResponse, this);
@@ -162,6 +169,11 @@ public class Messageportlet extends GenericPortlet implements ModeOwner {
 	@Override
 	public Integer getServerTimeOffset() {
 		return serverTimeOffset;
+	}
+
+	@Override
+	public Long getCurrentUserId() {
+		return user.getUserId();
 	}
 
 }

@@ -4,28 +4,31 @@
 <jsp:useBean class="java.lang.String" id="returnAction" scope="request" />
 <portlet:defineObjects />
 
+<div class="topButtons">
 <form id = "<portlet:namespace />createThread"
 action="<%=returnAction %>"
 method="post">
 <input type=submit value="Back to threads">
 </form>
+</div>
 
 
 <form id = "<portlet:namespace />submitThread"
 action="<%=submitThreadURL %>"
 method="post">
 
-<b>Title<b/> <br>
-<input name=title id=title />
-<br>
-<br>
-<b>Body</b><br>
-<iframe src="<%=padURL %>" style="height: 400px; width: 100%; overflow-x: scroll; overflow-y: scroll;" >
-Your browser doesn't support IFrames
-</iframe>
-<input type=hidden name=url value="<%=padURL %>" />
-<br>
-<input type=submit value="Create">
+<div  class="newThreadForm">
+    <div class="newThreadFormLabel">Title</div>
+    <div class="newThreadFormField"><input name=title id=title /></div>
+    
+    <div class="newThreadFormLabel">Body</div>
+    <div class="newThreadFormField"><iframe src="<%=padURL %>"  >
+                Your browser doesn't support IFrames
+                </iframe>
+    </div>
+    <input type=hidden name=url value="<%=padURL %>" />
+    <input type=submit value="Create">
+</div>
 
 </form>
 
