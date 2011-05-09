@@ -100,7 +100,7 @@ public class SKQuestionWrapper implements SKQuestion {
 		_skQuestion.setGroupId(groupId);
 	}
 
-	public com.alacrity.openingdesign.messageportlet.model.model.SKQuestion toEscapedModel() {
+	public SKQuestion toEscapedModel() {
 		return _skQuestion.toEscapedModel();
 	}
 
@@ -145,8 +145,7 @@ public class SKQuestionWrapper implements SKQuestion {
 		return _skQuestion.clone();
 	}
 
-	public int compareTo(
-		com.alacrity.openingdesign.messageportlet.model.model.SKQuestion skQuestion) {
+	public int compareTo(SKQuestion skQuestion) {
 		return _skQuestion.compareTo(skQuestion);
 	}
 
