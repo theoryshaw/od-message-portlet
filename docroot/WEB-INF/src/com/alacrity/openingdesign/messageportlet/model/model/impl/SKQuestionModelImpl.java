@@ -63,7 +63,7 @@ public class SKQuestionModelImpl extends BaseModelImpl<SKQuestion>
 			{ "companyId", new Integer(Types.BIGINT) },
 			{ "groupId", new Integer(Types.BIGINT) }
 		};
-	public static final String TABLE_SQL_CREATE = "create table SK_SKQuestion (Question_ID LONG not null primary key,Parent_ID LONG,Title VARCHAR(75) null,Url VARCHAR(75) null,Post_Date LONG,User_ID LONG,companyId LONG,groupId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table SK_SKQuestion (Question_ID LONG not null primary key,Parent_ID LONG,Title VARCHAR(75) null,Url STRING null,Post_Date LONG,User_ID LONG,companyId LONG,groupId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table SK_SKQuestion";
 	public static final String ORDER_BY_JPQL = " ORDER BY skQuestion.Post_Date DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY SK_SKQuestion.Post_Date DESC";

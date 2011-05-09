@@ -15,6 +15,7 @@
 package com.alacrity.openingdesign.messageportlet.model.service.impl;
 
 import java.util.Collection;
+import java.util.Date;
 
 import com.alacrity.openingdesign.messageportlet.model.model.SKQuestion;
 import com.alacrity.openingdesign.messageportlet.model.service.base.SKQuestionLocalServiceBaseImpl;
@@ -48,16 +49,6 @@ import com.liferay.portal.kernel.exception.SystemException;
  * @see com.alacrity.openingdesign.messageportlet.model.service.SKQuestionLocalServiceUtil
  */
 public class SKQuestionLocalServiceImpl extends SKQuestionLocalServiceBaseImpl {
-
-	public synchronized SKQuestion addSKQuestion(SKQuestion skQuestion)
-			throws SystemException {
-		skQuestion.setNew(true);
-		
-		skQuestion.setPrimaryKey(counterLocalService.increment());
-
-		return skQuestionPersistence.update(skQuestion, false);
-	}
-
 	public synchronized SKQuestion getSKQuestionByUrl(final String url)
 			throws PortalException, SystemException {
 
@@ -71,4 +62,30 @@ public class SKQuestionLocalServiceImpl extends SKQuestionLocalServiceBaseImpl {
 		return ret.iterator().next();
 
 	}
+
+	public synchronized SKQuestion createQuestionWithParent(String title,
+			String url, long userId, long parentOrZero) {
+		
+		try {
+			SKQuestion question = skQuestionPersistence
+					.create(counterLocalService.increment(SKQuestion.class
+							.getName()));
+			question.setTitle(title);
+			question.setUser_ID(userId);
+			question.setPost_Date(new Date().getTime());
+			question.setUrl(url);
+			if (parentOrZero != 0L) {
+				question.setParent_ID(parentOrZero);
+			}
+
+			skQuestionPersistence.update(question, false);
+			
+			return question;
+			
+		} catch (SystemException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
 }

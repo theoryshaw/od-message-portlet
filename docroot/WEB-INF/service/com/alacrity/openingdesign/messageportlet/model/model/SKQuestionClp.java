@@ -106,6 +106,22 @@ public class SKQuestionClp extends BaseModelImpl<SKQuestion>
 		_groupId = groupId;
 	}
 
+	public java.lang.String getEtherpadId() {
+		throw new UnsupportedOperationException();
+	}
+
+	public java.net.URL getHtmlExportURL() {
+		throw new UnsupportedOperationException();
+	}
+
+	public java.net.URL getHistoryUrl() {
+		throw new UnsupportedOperationException();
+	}
+
+	public java.lang.String getHtmlRepresentation() {
+		throw new UnsupportedOperationException();
+	}
+
 	public SKQuestion toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;

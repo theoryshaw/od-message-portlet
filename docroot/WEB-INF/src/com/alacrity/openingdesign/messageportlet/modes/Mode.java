@@ -10,11 +10,13 @@ import javax.portlet.RenderResponse;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 public enum Mode {
 	
 	DEFAULT{
-
+		
 		@Override
 		public final void doMode(RenderRequest renderRequest,
 				RenderResponse renderResponse, ModeOwner owner) throws IOException, PortletException,
@@ -54,7 +56,7 @@ public enum Mode {
 
 			setup(renderRequest,renderResponse,owner);
 
-			renderRequest.setAttribute(PAD_URL_PARAMETER_NAME, owner.getUnusedURL());
+			renderRequest.setAttribute(PAD_URL_PARAMETER_NAME, owner.getUnusedURL() + "?docreate=true");
 
 			PortletURL createThread = renderResponse.createActionURL();
 			createThread.setParameter(ACTION, SUBMIT_NEW_THREAD_ACTION);
@@ -107,16 +109,19 @@ public enum Mode {
 			
 			renderRequest.setAttribute(THREAD_ID_PARAMETER_NAME, action.getParameter(THREAD_ID_PARAMETER_NAME));
 
-			PortletURL awnserAction = renderResponse.createActionURL();
-			awnserAction.setParameter(ACTION, ADD_AWNSER_TO_THREAD_ACTION);
-			awnserAction.setParameter(VIEW_TAB_PARAMETER_NAME, VIEW_MY_AWNSERS_ACTION);
-			renderRequest.setAttribute(AWNSER_ACTION_URL_PARAMETER_NAME, awnserAction.toString());
-			
-			
+			PortletURL addAwnser = renderResponse.createActionURL();
+			addAwnser.setParameter(ACTION, ADD_AWNSER_TO_THREAD_ACTION);
+			addAwnser.setParameter(VIEW_TAB_PARAMETER_NAME, VIEW_MY_AWNSERS_ACTION);
+			addAwnser.setParameter(THREAD_ID_PARAMETER_NAME, action.getParameter(THREAD_ID_PARAMETER_NAME));
+			renderRequest.setAttribute(AWNSER_ACTION_URL_PARAMETER_NAME, addAwnser.toString());
 			
 			PortletURL viewThreadQuestionAction = renderResponse.createActionURL();
 			viewThreadQuestionAction.setParameter(ACTION, VIEW_THREAD_ACTION);
-			viewThreadQuestionAction.setParameter(THREAD_ID_PARAMETER_NAME, action.getParameter(THREAD_ID_PARAMETER_NAME));
+			try {
+				viewThreadQuestionAction.setParameter(THREAD_ID_PARAMETER_NAME, action.getParameter(THREAD_ID_PARAMETER_NAME));
+			} catch (IllegalArgumentException e) {
+				// means that we didn't get the param from 'action'... ignore
+			}
 			viewThreadQuestionAction.setParameter(VIEW_TAB_PARAMETER_NAME, VIEW_QUESTION_ACTION);
 			renderRequest.setAttribute(VIEW_QUESTION_URL_PARAMETER_NAME, viewThreadQuestionAction.toString());
 			
@@ -157,8 +162,9 @@ public enum Mode {
 			setup(renderRequest,renderResponse,owner);
 			
 			ActionRequest action = owner.getCurrentAction();
-			
-			owner.saveNewThread("Awnser to thread", owner.getUnusedURL(), Long.parseLong(action
+			Log log = LogFactoryUtil.getLog(ADD_AWNSER.getClass());
+			log.info("owner: " + owner);
+			owner.saveNewThread("Awnser to thread", owner.getUnusedURL() + "?docreate=true", Long.parseLong(action
 					.getParameter(THREAD_ID_PARAMETER_NAME).toString()));
 
 			Mode.VIEW_THREAD.doMode(renderRequest, renderResponse, owner);
@@ -277,6 +283,8 @@ public enum Mode {
 	public static final Mode getMode(ModeOwner owner){
 		
 		String action = owner.getCurrentAction().getParameter(ACTION);
+		
+		System.out.println("action: " + action);
 		
 		if (action.equals(CREATE_NEW_THREAD_ACTION)) {
 			return Mode.CREATE_NEW_THREAD;

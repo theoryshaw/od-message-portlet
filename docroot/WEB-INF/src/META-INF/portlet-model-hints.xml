@@ -5,7 +5,9 @@
 		<field name="Question_ID" type="long" />
 		<field name="Parent_ID" type="long" />
 		<field name="Title" type="String" />
-		<field name="Url" type="String" />
+		<field name="Url" type="String">
+			<hint name="max-length">4000</hint>
+		</field>
 		<field name="Post_Date" type="long" />
 		<field name="User_ID" type="long" />
 		<field name="companyId" type="long" />

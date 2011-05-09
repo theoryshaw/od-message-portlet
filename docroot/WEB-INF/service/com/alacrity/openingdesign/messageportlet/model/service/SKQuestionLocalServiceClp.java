@@ -423,6 +423,30 @@ public class SKQuestionLocalServiceClp implements SKQuestionLocalService {
 		return (com.alacrity.openingdesign.messageportlet.model.model.SKQuestion)ClpSerializer.translateOutput(returnObj);
 	}
 
+	public com.alacrity.openingdesign.messageportlet.model.model.SKQuestion createQuestionWithParent(
+		java.lang.String title, java.lang.String url, long userId,
+		long parentOrZero) {
+		Object returnObj = null;
+
+		MethodHandler methodHandler = new MethodHandler(_createQuestionWithParentMethodKey14,
+				title, url, userId, parentOrZero);
+
+		try {
+			returnObj = _classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.alacrity.openingdesign.messageportlet.model.model.SKQuestion)ClpSerializer.translateOutput(returnObj);
+	}
+
 	public ClassLoaderProxy getClassLoaderProxy() {
 		return _classLoaderProxy;
 	}
@@ -466,4 +490,7 @@ public class SKQuestionLocalServiceClp implements SKQuestionLocalService {
 			boolean.class);
 	private MethodKey _getSKQuestionByUrlMethodKey13 = new MethodKey(_classLoaderProxy.getClassName(),
 			"getSKQuestionByUrl", java.lang.String.class);
+	private MethodKey _createQuestionWithParentMethodKey14 = new MethodKey(_classLoaderProxy.getClassName(),
+			"createQuestionWithParent", java.lang.String.class,
+			java.lang.String.class, long.class, long.class);
 }

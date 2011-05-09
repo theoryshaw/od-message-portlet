@@ -213,4 +213,8 @@ public interface SKQuestionLocalService {
 		java.lang.String url)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.alacrity.openingdesign.messageportlet.model.model.SKQuestion createQuestionWithParent(
+		java.lang.String title, java.lang.String url, long userId,
+		long parentOrZero);
 }

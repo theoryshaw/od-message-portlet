@@ -1,0 +1,4 @@
+docroot/WEB-INF/**/*.class
+docroot/WEB-INF/classes/**
+docroot/WEB-INF/lib/message-portlet-service.jar
+.DS_Store

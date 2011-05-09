@@ -4,11 +4,13 @@ import java.util.Random;
 
 public class RandomPadGenerator implements PadURLGenerator {
 
+	public static final String BASE_URL = System.getProperty("sketchpad.baseurl");
+	
 	@Override
 	public String getURL() {
 		
 		RandomString(50);
-		return "http://pad.freecode.no/"+nextString();
+		return BASE_URL + nextString();
 		
 	}
 	

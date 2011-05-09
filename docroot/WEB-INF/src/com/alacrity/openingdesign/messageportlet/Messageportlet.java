@@ -17,10 +17,13 @@ import com.alacrity.openingdesign.messageportlet.model.model.SKQuestion;
 import com.alacrity.openingdesign.messageportlet.model.model.impl.SKQuestionImpl;
 import com.alacrity.openingdesign.messageportlet.model.service.SKQuestionLocalService;
 import com.alacrity.openingdesign.messageportlet.model.service.SKQuestionLocalServiceUtil;
+import com.alacrity.openingdesign.messageportlet.model.service.impl.SKQuestionLocalServiceImpl;
 import com.alacrity.openingdesign.messageportlet.modes.Mode;
 import com.alacrity.openingdesign.messageportlet.modes.ModeOwner;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
@@ -30,6 +33,8 @@ public class Messageportlet extends GenericPortlet implements ModeOwner {
 	protected String createThreadJSP;
 	protected String viewThreadJSP;
 
+	private static final Log LOG = LogFactoryUtil.getLog(Messageportlet.class);
+	
 	public void init() throws PortletException {
 		viewJSP = getInitParameter("view-jsp");
 		createThreadJSP = getInitParameter("createThread-jsp");
@@ -64,6 +69,8 @@ public class Messageportlet extends GenericPortlet implements ModeOwner {
 				userTimeOffset=TimeZone.getDefault().getRawOffset();
 			}
 			
+			LOG.info("mode: " + mode);
+			System.out.println("mode: " + mode);
 			
 			mode.doMode(renderRequest, renderResponse, this);
 			
@@ -97,15 +104,20 @@ public class Messageportlet extends GenericPortlet implements ModeOwner {
 	public void saveNewThread(final String title,final String url,final Long parentId)
 			throws SystemException {
 
-		final SKQuestion q = new SKQuestionImpl();
+		// TODO: should rather happen in SKQuestionLocalServiceImpl??
+		
+		SKQuestion q = new SKQuestionImpl();
 		q.setTitle(title);
 		q.setUrl(url);
 		q.setPost_Date(new Date().getTime());
 		q.setUser_ID(user.getUserId());
 		q.setParent_ID(parentId);
 
-		access.addSKQuestion(q);
-		
+		LOG.info("about to store new question: " + q);
+		// TODO: we re-assign q??
+		q = access.createQuestionWithParent(title, url, user.getUserId(), parentId);
+		LOG.info("new question created: " + q);
+		System.out.println("new question created: " + q);
 
 	}
 

@@ -162,6 +162,22 @@ public class SKQuestionWrapper implements SKQuestion {
 		return _skQuestion.toXmlString();
 	}
 
+	public java.lang.String getEtherpadId() {
+		return _skQuestion.getEtherpadId();
+	}
+
+	public java.net.URL getHtmlExportURL() {
+		return _skQuestion.getHtmlExportURL();
+	}
+
+	public java.net.URL getHistoryUrl() {
+		return _skQuestion.getHistoryUrl();
+	}
+
+	public java.lang.String getHtmlRepresentation() {
+		return _skQuestion.getHtmlRepresentation();
+	}
+
 	public SKQuestion getWrappedSKQuestion() {
 		return _skQuestion;
 	}

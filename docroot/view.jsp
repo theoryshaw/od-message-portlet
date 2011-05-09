@@ -46,7 +46,7 @@
 <form id = "<portlet:namespace />createThread"
 action="<%=createThreadURL %>"
 method="post">
-<input type=submit value="Post new Thread">
+<input type=submit value="Post new Query">
 </form>
 <br>
 <%
@@ -73,13 +73,13 @@ Collection<SKQuestion> questions = SKQuestionLocalServiceUtil.getService().dynam
 SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy hh:mm");
 
 if (questions.size()==0){
-    out.print("No threads exist");
+    out.print("No questions exist");
 } else { %>
 <table class=threadsTable>
     <tr>
         <th>Title</th>
-        <th>User</th>
-        <th>Date</th>
+        <th>Created By</th>
+        <th>Created At</th>
         <th></th>
     </tr>
 <%
@@ -90,13 +90,18 @@ for (SKQuestion cur : questions){
     <tr>
         <td><% out.print(cur.getTitle()); %></td>
         <td><% out.print(user.getFullName()); %></td>
-        <td><% out.print(format.format(new Date(((Long)(cur.getPost_Date()+(Integer.parseInt(userTime))-(Integer.parseInt(serverTime))))))); %></td>
+        <td><% long postDate = cur.getPost_Date(); out.print(format.format(
+        		new Date(
+        				postDate
+        						+ Integer.parseInt(userTime) 
+        						- Integer.parseInt(serverTime)
+        						))); %></td>
         <td>
             <form id = "<portlet:namespace />viewThread<%out.print(cur.getPrimaryKey());%>"
                 action="<%=viewThreadURL %>"
                 method="post">
                 <input type=hidden name=threadId value=<%out.print(cur.getPrimaryKey());%> />
-                <input type=submit value="View" />
+                <input type=submit value="Open" />
             </form>
         </td>
     </tr>

@@ -234,6 +234,13 @@ public class SKQuestionLocalServiceUtil {
 		return getService().getSKQuestionByUrl(url);
 	}
 
+	public static com.alacrity.openingdesign.messageportlet.model.model.SKQuestion createQuestionWithParent(
+		java.lang.String title, java.lang.String url, long userId,
+		long parentOrZero) {
+		return getService()
+				   .createQuestionWithParent(title, url, userId, parentOrZero);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

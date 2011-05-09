@@ -32,4 +32,11 @@ package com.alacrity.openingdesign.messageportlet.model.model;
  * @generated
  */
 public interface SKQuestion extends SKQuestionModel {
+	public java.lang.String getEtherpadId();
+
+	public java.net.URL getHtmlExportURL();
+
+	public java.net.URL getHistoryUrl();
+
+	public java.lang.String getHtmlRepresentation();
 }

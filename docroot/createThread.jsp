@@ -8,7 +8,7 @@
 <form id = "<portlet:namespace />createThread"
 action="<%=returnAction %>"
 method="post">
-<input type=submit value="Back to threads">
+<input type=submit value="Back to Queries">
 </form>
 </div>
 
@@ -19,7 +19,7 @@ method="post">
 
 <div  class="newThreadForm">
     <div class="newThreadFormLabel">Title</div>
-    <div class="newThreadFormField"><input name=title id=title /></div>
+    <div class="newThreadFormField"><input name=title id=title size="65"/></div>
     
     <div class="newThreadFormLabel">Body</div>
     <div class="newThreadFormField"><iframe src="<%=padURL %>"  >

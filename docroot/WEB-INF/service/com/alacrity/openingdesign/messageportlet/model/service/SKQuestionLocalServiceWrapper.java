@@ -228,6 +228,13 @@ public class SKQuestionLocalServiceWrapper implements SKQuestionLocalService {
 		return _skQuestionLocalService.getSKQuestionByUrl(url);
 	}
 
+	public com.alacrity.openingdesign.messageportlet.model.model.SKQuestion createQuestionWithParent(
+		java.lang.String title, java.lang.String url, long userId,
+		long parentOrZero) {
+		return _skQuestionLocalService.createQuestionWithParent(title, url,
+			userId, parentOrZero);
+	}
+
 	public SKQuestionLocalService getWrappedSKQuestionLocalService() {
 		return _skQuestionLocalService;
 	}

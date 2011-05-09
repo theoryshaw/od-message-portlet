@@ -57,30 +57,27 @@ li.tabpaneActive {
 div.tabbody{
 }
 
-
-
-
-iframe{
+iframe {
     width:100%;
-    scrolling:yes;
 }
 
-iframe.question{
+iframe.question {
 	height:900px;
 }
 
 
-iframe.awnsers{
+iframe.answers {
 	height:900px;
 }
 
 
-iframe.allAwnsers{
-	height:400px;
+iframe.allAnswers {
+	height:900px;
 }
 
-
-
+.history-pad iframe {
+	height: 900px;
+}
 
 div.topButtons{}
 
@@ -108,3 +105,6 @@ div.navigation{}
 
 
 div.serverTime{}
+
+.answer-pad {
+}
