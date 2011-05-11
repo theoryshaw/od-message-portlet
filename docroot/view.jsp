@@ -67,6 +67,10 @@
         orderable="<%= true %>"
         />
 	
+	<liferay-ui:search-container-column-text
+      name="categories"
+      property="categoriesDisplayable" />
+      
 	</liferay-ui:search-container-row>
 	<liferay-ui:search-iterator />
 	</liferay-ui:search-container>

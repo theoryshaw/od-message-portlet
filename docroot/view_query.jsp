@@ -18,9 +18,17 @@
   <portlet:param name="redirect" value="<%= currentURL %>" />
 </portlet:renderURL>
 
+<portlet:renderURL var="editPadURL">
+  <portlet:param name="jspPage" value="/edit_query_pad.jsp" />
+  <portlet:param name="resourcePrimKey" value="<%= String.valueOf(query.getQueryId()) %>" />
+  <portlet:param name="redirect" value="<%= currentURL %>" />
+</portlet:renderURL>
+
 <c:if test='<%= query.getUserId() == user.getUserId() %>'>
 <input type="button" value="<liferay-ui:message key="edit-query" />"
 			onClick="location.href = '<%=editQueryURL.toString()%>';" />
+<input type="button" value="<liferay-ui:message key="edit-pad" />"
+			onClick="location.href = '<%=editPadURL.toString()%>';" />
 </c:if>
 
 <div class="query-view">

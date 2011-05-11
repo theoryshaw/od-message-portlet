@@ -7,12 +7,14 @@ import java.util.List;
 import javax.portlet.ActionRequest;
 import javax.portlet.RenderRequest;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.persistence.UserUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.openingdesign.qna.model.QueryAndResponse;
 import com.openingdesign.qna.model.impl.QueryAndResponseImpl;
 import com.openingdesign.qna.service.QueryAndResponseLocalServiceUtil;
@@ -34,6 +36,7 @@ public class QueryAndResponseUtil {
 			for (QueryAndResponse qnr : qnrs) {
 				try {
 					qnr.setCreatedByName(UserLocalServiceUtil.getUser(qnr.getUserId()).getFullName());
+					qnr.setCategoriesDisplayable(determineCategoriesDisplayable(qnr));
 				} catch (Exception e) {
 					e.printStackTrace();
 					qnr.setCreatedByName("??");
@@ -47,6 +50,21 @@ public class QueryAndResponseUtil {
 		
 	}
 	
+	private static String determineCategoriesDisplayable(QueryAndResponse qnr) throws SystemException, PortalException {
+		
+		long[] categoryIds = AssetCategoryLocalServiceUtil.getCategoryIds(QueryAndResponse.class.getName(), qnr.getPrimaryKey());
+		StringBuilder r = new StringBuilder();
+		for (long categoryId : categoryIds) {
+			String name = AssetCategoryLocalServiceUtil.getCategory(categoryId).getName();
+			if (r.length() > 0) {
+				r.append(", ");
+			}
+			r.append(name);
+		}
+		return r.toString();
+		
+	}
+
 	public static int getQueriesCount(RenderRequest request) {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		long groupId = themeDisplay.getScopeGroupId();

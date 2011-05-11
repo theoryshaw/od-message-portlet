@@ -1,4 +1,6 @@
 docroot/WEB-INF/**/*.class
 docroot/WEB-INF/classes/**
-docroot/WEB-INF/lib/message-portlet-service.jar
+docroot/WEB-INF/service/**
+docroot/WEB-INF/sql/**
 .DS_Store
+docroot/WEB-INF/lib/sketchspaces-qna-portlet-service.jar

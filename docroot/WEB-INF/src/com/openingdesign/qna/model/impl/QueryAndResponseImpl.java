@@ -47,7 +47,7 @@ import com.openingdesign.qna.util.RandomPadIdGenerator;
 public class QueryAndResponseImpl extends QueryAndResponseModelImpl implements
 		QueryAndResponse {
 
-	private String stringId, createdByName;
+	private String stringId, createdByName, categoriesDisplayable;
 
 	public QueryAndResponseImpl() {
 	}
@@ -68,6 +68,14 @@ public class QueryAndResponseImpl extends QueryAndResponseModelImpl implements
 		return createdByName;
 	}
 
+	public void setCategoriesDisplayable(String s) {
+		categoriesDisplayable = s;
+	}
+	
+	public String getCategoriesDisplayable() {
+		return categoriesDisplayable;
+	}
+	
 	public String getEtherpadId() {
 		URL url;
 		try {

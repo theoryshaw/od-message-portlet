@@ -1,14 +1,20 @@
+<%@page import="com.openingdesign.qna.model.impl.QueryAndResponseImpl"%>
 <%@include file="/init.jsp"%>
 
 <portlet:renderURL windowState="normal" var="backUrl">
 	<portlet:param name="jspPage" value="/view.jsp"></portlet:param>
 </portlet:renderURL>
 
-<liferay-ui:header backURL="<%= backUrl %>" title="Create / Edit Query" />
+<liferay-ui:header backURL="<%= backUrl %>" title="Query: Title / Categories / Tags" />
 
 <%
 	QueryAndResponse query = (QueryAndResponse) request
 			.getAttribute(WebKeys.QUERY_ENTRY);
+	String submitLabel = "Save";
+	if (query == null) {
+		query = new QueryAndResponseImpl();
+		submitLabel = "Create Query...";
+	}
 	String redirect = ParamUtil.getString(request, "redirect");
 %>
 
@@ -26,7 +32,8 @@
 	method="post">
 
 	<aui:fieldset>
-		<aui:model-context bean="<%= query %>" model="<%= QueryAndResponse.class %>" />
+		<aui:model-context bean="<%= query %>"
+			model="<%= QueryAndResponse.class %>" />
 
 		<aui:input name="queryId" type="hidden" />
 		<h1>The Query</h1>
@@ -38,7 +45,7 @@
 		<aui:button-row>
 			<c:if
 				test='<%= query.getQueryId() == 0 || query.getUserId() == user.getUserId() %>'>
-				<aui:button type="submit" />
+				<aui:button value="<%= submitLabel %>" type="submit" />
 			</c:if>
 			<aui:button type="cancel" value="Cancel" onClick="<%= cancelURL %>" />
 		</aui:button-row>

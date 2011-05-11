@@ -29,6 +29,7 @@
 	<entity class="com.openingdesign.qna.model.impl.QueryAndResponseImpl" name="QueryAndResponse">
 		<table name="OD_QueryAndResponse" />
 		<attributes>
+			<transient name="categoriesDisplayable" />
 			<transient name="createdByName" />
 			<transient name="queryIdString" />
 		</attributes>
