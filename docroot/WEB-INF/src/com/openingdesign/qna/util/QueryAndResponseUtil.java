@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -39,7 +40,7 @@ public class QueryAndResponseUtil {
 		
 			DynamicQuery query = DynamicQueryFactoryUtil.forClass(
 					QueryAndResponse.class,
-					PortletClassLoaderUtil.getClassLoader());
+					PortalClassLoaderUtil.getClassLoader());
 			query.add(PropertyFactoryUtil.forName("parentId").eq(0L));
 			query.addOrder(OrderFactoryUtil.desc("createdAt"));
 			
@@ -76,7 +77,7 @@ public class QueryAndResponseUtil {
 		try {
 			DynamicQuery query = DynamicQueryFactoryUtil.forClass(
 					QueryAndResponse.class,
-					PortletClassLoaderUtil.getClassLoader());
+					PortalClassLoaderUtil.getClassLoader());
 			query.add(PropertyFactoryUtil.forName("parentId").eq(queryId));
 			query.addOrder(OrderFactoryUtil.desc("createdAt"));
 			
