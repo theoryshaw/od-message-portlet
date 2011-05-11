@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="com.openingdesign.qna.model.QueryAndResponse" />
+	<class name="com.openingdesign.qna.model.impl.QueryAndResponseImpl" table="OD_QueryAndResponse">
+		<cache usage="read-write" />
+		<id name="queryId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="uuid" column="uuid_" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="parentId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="title" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="url" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createdAt" type="org.hibernate.type.TimestampType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+</hibernate-mapping>

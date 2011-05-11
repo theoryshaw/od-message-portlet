@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder
+6.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd">
+<service-builder package-path="com.openingdesign.qna">
+	<author>Alacrity Pty (Ltd)</author>
+	<namespace>OD</namespace>
+	<entity name="QueryAndResponse" uuid="true" local-service="true" remote-service="false">
+		<column name="queryId" type="long" primary="true" />
+		<column name="parentId" type="long" />
+		<column name="title" type="String" />
+		<column name="url" type="String" />
+		<column name="createdAt" type="Date" />
+
+		<!-- foreign keys -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+
+		<!-- order -->
+		<order>
+			<order-column name="createdAt" order-by="desc" />
+			<order-column name="queryId" order-by="asc" />
+		</order>
+
+		<!-- finders -->
+
+		<finder name="All" return-type="Collection">
+			<finder-column name="parentId" />
+		</finder>
+
+		<finder name="findByURL" return-type="Collection">
+			<finder-column name="url" />
+		</finder>
+
+		<!-- references -->
+
+		<reference package-path="com.liferay.portlet.social" entity="SocialActivity"/>
+		<reference package-path="com.liferay.portal" entity="User"/>
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry"/>
+
+	</entity>
+</service-builder>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model-hints>
+	<model name="com.openingdesign.qna.model.QueryAndResponse">
+		<field name="uuid" type="String" />
+		<field name="queryId" type="long" />
+		<field name="parentId" type="long" />
+		<field name="title" type="String" />
+		<field name="url" type="String" />
+		<field name="createdAt" type="Date" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+	</model>
+</model-hints>

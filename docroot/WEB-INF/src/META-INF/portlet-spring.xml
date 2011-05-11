@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.openingdesign.qna.service.QueryAndResponseLocalService" class="com.openingdesign.qna.service.impl.QueryAndResponseLocalServiceImpl" />
+	<bean id="com.openingdesign.qna.service.QueryAndResponseLocalServiceUtil" class="com.openingdesign.qna.service.QueryAndResponseLocalServiceUtil">
+		<property name="service" ref="com.openingdesign.qna.service.QueryAndResponseLocalService" />
+	</bean>
+	<bean id="com.openingdesign.qna.service.persistence.QueryAndResponsePersistence" class="com.openingdesign.qna.service.persistence.QueryAndResponsePersistenceImpl" parent="basePersistence" />
+</beans>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="com.openingdesign.qna.model.impl.QueryAndResponseModelImpl">
+		<attributes>
+			<id name="queryId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="parentId" />
+			<basic name="title" />
+			<basic name="url" />
+			<basic name="createdAt">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="companyId" />
+			<basic name="groupId" />
+			<basic name="userId" />
+			<transient name="primaryKey" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="com.openingdesign.qna.model.impl.QueryAndResponseImpl" name="QueryAndResponse">
+		<table name="OD_QueryAndResponse" />
+		<attributes>
+			<transient name="queryIdString" />
+		</attributes>
+	</entity>
+</entity-mappings>
