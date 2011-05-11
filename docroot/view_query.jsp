@@ -81,6 +81,7 @@ to view query content.</iframe></div>
     </portlet:renderURL>
     
     <liferay-ui:search-container-column-text
+      href="<%=rowURL %>"
       name="html-representation-responses"
       property="htmlRepresentationShortened"
       orderable="<%=false %>" />
