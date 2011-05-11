@@ -123,6 +123,19 @@ public class QueryAndResponsePersistenceImpl extends BasePersistenceImpl<QueryAn
 			QueryAndResponseModelImpl.FINDER_CACHE_ENABLED,
 			FINDER_CLASS_NAME_LIST, "countByfindByURL",
 			new String[] { String.class.getName() });
+	public static final FinderPath FINDER_PATH_FIND_BY_FINDBYPARENTID = new FinderPath(QueryAndResponseModelImpl.ENTITY_CACHE_ENABLED,
+			QueryAndResponseModelImpl.FINDER_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST, "findByfindByParentId",
+			new String[] {
+				Long.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_COUNT_BY_FINDBYPARENTID = new FinderPath(QueryAndResponseModelImpl.ENTITY_CACHE_ENABLED,
+			QueryAndResponseModelImpl.FINDER_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST, "countByfindByParentId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(QueryAndResponseModelImpl.ENTITY_CACHE_ENABLED,
 			QueryAndResponseModelImpl.FINDER_CACHE_ENABLED,
 			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
@@ -1693,6 +1706,348 @@ public class QueryAndResponsePersistenceImpl extends BasePersistenceImpl<QueryAn
 	}
 
 	/**
+	 * Finds all the query and responses where parentId = &#63;.
+	 *
+	 * @param parentId the parent id to search with
+	 * @return the matching query and responses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<QueryAndResponse> findByfindByParentId(long parentId)
+		throws SystemException {
+		return findByfindByParentId(parentId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Finds a range of all the query and responses where parentId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentId the parent id to search with
+	 * @param start the lower bound of the range of query and responses to return
+	 * @param end the upper bound of the range of query and responses to return (not inclusive)
+	 * @return the range of matching query and responses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<QueryAndResponse> findByfindByParentId(long parentId,
+		int start, int end) throws SystemException {
+		return findByfindByParentId(parentId, start, end, null);
+	}
+
+	/**
+	 * Finds an ordered range of all the query and responses where parentId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentId the parent id to search with
+	 * @param start the lower bound of the range of query and responses to return
+	 * @param end the upper bound of the range of query and responses to return (not inclusive)
+	 * @param orderByComparator the comparator to order the results by
+	 * @return the ordered range of matching query and responses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<QueryAndResponse> findByfindByParentId(long parentId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		Object[] finderArgs = new Object[] {
+				parentId,
+				
+				String.valueOf(start), String.valueOf(end),
+				String.valueOf(orderByComparator)
+			};
+
+		List<QueryAndResponse> list = (List<QueryAndResponse>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_FINDBYPARENTID,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_QUERYANDRESPONSE_WHERE);
+
+			query.append(_FINDER_COLUMN_FINDBYPARENTID_PARENTID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(QueryAndResponseModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentId);
+
+				list = (List<QueryAndResponse>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_FINDBYPARENTID,
+						finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_FINDBYPARENTID,
+						finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Finds the first query and response in the ordered set where parentId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentId the parent id to search with
+	 * @param orderByComparator the comparator to order the set by
+	 * @return the first matching query and response
+	 * @throws com.openingdesign.qna.NoSuchQueryAndResponseException if a matching query and response could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public QueryAndResponse findByfindByParentId_First(long parentId,
+		OrderByComparator orderByComparator)
+		throws NoSuchQueryAndResponseException, SystemException {
+		List<QueryAndResponse> list = findByfindByParentId(parentId, 0, 1,
+				orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(4);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("parentId=");
+			msg.append(parentId);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchQueryAndResponseException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Finds the last query and response in the ordered set where parentId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentId the parent id to search with
+	 * @param orderByComparator the comparator to order the set by
+	 * @return the last matching query and response
+	 * @throws com.openingdesign.qna.NoSuchQueryAndResponseException if a matching query and response could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public QueryAndResponse findByfindByParentId_Last(long parentId,
+		OrderByComparator orderByComparator)
+		throws NoSuchQueryAndResponseException, SystemException {
+		int count = countByfindByParentId(parentId);
+
+		List<QueryAndResponse> list = findByfindByParentId(parentId, count - 1,
+				count, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(4);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("parentId=");
+			msg.append(parentId);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchQueryAndResponseException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Finds the query and responses before and after the current query and response in the ordered set where parentId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param queryId the primary key of the current query and response
+	 * @param parentId the parent id to search with
+	 * @param orderByComparator the comparator to order the set by
+	 * @return the previous, current, and next query and response
+	 * @throws com.openingdesign.qna.NoSuchQueryAndResponseException if a query and response with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public QueryAndResponse[] findByfindByParentId_PrevAndNext(long queryId,
+		long parentId, OrderByComparator orderByComparator)
+		throws NoSuchQueryAndResponseException, SystemException {
+		QueryAndResponse queryAndResponse = findByPrimaryKey(queryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			QueryAndResponse[] array = new QueryAndResponseImpl[3];
+
+			array[0] = getByfindByParentId_PrevAndNext(session,
+					queryAndResponse, parentId, orderByComparator, true);
+
+			array[1] = queryAndResponse;
+
+			array[2] = getByfindByParentId_PrevAndNext(session,
+					queryAndResponse, parentId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected QueryAndResponse getByfindByParentId_PrevAndNext(
+		Session session, QueryAndResponse queryAndResponse, long parentId,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_QUERYANDRESPONSE_WHERE);
+
+		query.append(_FINDER_COLUMN_FINDBYPARENTID_PARENTID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			if (orderByFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		else {
+			query.append(QueryAndResponseModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(parentId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByValues(queryAndResponse);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<QueryAndResponse> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
 	 * Finds all the query and responses.
 	 *
 	 * @return the query and responses
@@ -1847,6 +2202,18 @@ public class QueryAndResponsePersistenceImpl extends BasePersistenceImpl<QueryAn
 	 */
 	public void removeByfindByURL(String url) throws SystemException {
 		for (QueryAndResponse queryAndResponse : findByfindByURL(url)) {
+			remove(queryAndResponse);
+		}
+	}
+
+	/**
+	 * Removes all the query and responses where parentId = &#63; from the database.
+	 *
+	 * @param parentId the parent id to search with
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByfindByParentId(long parentId) throws SystemException {
+		for (QueryAndResponse queryAndResponse : findByfindByParentId(parentId)) {
 			remove(queryAndResponse);
 		}
 	}
@@ -2117,6 +2484,59 @@ public class QueryAndResponsePersistenceImpl extends BasePersistenceImpl<QueryAn
 	}
 
 	/**
+	 * Counts all the query and responses where parentId = &#63;.
+	 *
+	 * @param parentId the parent id to search with
+	 * @return the number of matching query and responses
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByfindByParentId(long parentId) throws SystemException {
+		Object[] finderArgs = new Object[] { parentId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_FINDBYPARENTID,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_QUERYANDRESPONSE_WHERE);
+
+			query.append(_FINDER_COLUMN_FINDBYPARENTID_PARENTID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_FINDBYPARENTID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
 	 * Counts all the query and responses.
 	 *
 	 * @return the number of query and responses
@@ -2212,6 +2632,7 @@ public class QueryAndResponsePersistenceImpl extends BasePersistenceImpl<QueryAn
 	private static final String _FINDER_COLUMN_FINDBYURL_URL_1 = "queryAndResponse.url IS NULL";
 	private static final String _FINDER_COLUMN_FINDBYURL_URL_2 = "queryAndResponse.url = ?";
 	private static final String _FINDER_COLUMN_FINDBYURL_URL_3 = "(queryAndResponse.url IS NULL OR queryAndResponse.url = ?)";
+	private static final String _FINDER_COLUMN_FINDBYPARENTID_PARENTID_2 = "queryAndResponse.parentId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "queryAndResponse.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No QueryAndResponse exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No QueryAndResponse exists with the key {";

@@ -74,6 +74,7 @@ public class QueryAndResponseLocalServiceImpl extends
 		qnr.setUserId(serviceContext.getUserId());
 		qnr.setCreatedAt(new Date());
 		qnr.setTitle(dto.getTitle());
+		qnr.setParentId(dto.getParentId());
 		qnr.setUrl(RandomPadIdGenerator.BASE_URL + QueryAndResponseUtil.createNewPadId());
 
 		queryAndResponsePersistence.update(qnr, false);
@@ -130,8 +131,10 @@ public class QueryAndResponseLocalServiceImpl extends
 
 	}
 	
-	public QueryAndResponse getQueryAndResponse(long qnrId) throws SystemException {
-		return queryAndResponsePersistence.fetchByPrimaryKey(qnrId);
+	public QueryAndResponse getQueryAndResponse(long qnrId) throws SystemException, PortalException {
+		QueryAndResponse qnr = queryAndResponsePersistence.fetchByPrimaryKey(qnrId);
+		QueryAndResponseUtil.eagerFetchDetails(qnr);
+		return qnr;
 	}
 	
 }

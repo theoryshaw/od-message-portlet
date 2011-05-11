@@ -32,9 +32,20 @@ public class QNAOnSketchspaces extends MVCPortlet {
 		
 		try {
 			QueryAndResponse qnr = null;
+			
+			// get query instance (and store in request)
 			long resourcePrimKey = ParamUtil.getLong(request, "resourcePrimKey");
 			if (resourcePrimKey > 0) {
 				qnr = QueryAndResponseLocalServiceUtil.getQueryAndResponse(resourcePrimKey);
+				request.setAttribute(WebKeys.QUERY_ENTRY, qnr);
+			}
+			
+			// get response instance (and store in request)
+			long responsePrimKey = ParamUtil.getLong(request, "responsePrimKey");
+			if (responsePrimKey > 0) {
+				qnr = QueryAndResponseLocalServiceUtil.getQueryAndResponse(responsePrimKey);
+				request.setAttribute(WebKeys.QUERY_RESPONSE, qnr);
+				qnr = QueryAndResponseLocalServiceUtil.getQueryAndResponse(qnr.getParentId());
 				request.setAttribute(WebKeys.QUERY_ENTRY, qnr);
 			}
 		} catch (Exception e) {
@@ -98,6 +109,26 @@ public class QNAOnSketchspaces extends MVCPortlet {
 			response.setRenderParameter("jspPage", "/edit_query.jsp");
 			
 		}
+	}
+	
+	public void addResponse(ActionRequest request, ActionResponse response) throws PortalException, SystemException {
+		
+		QueryAndResponse r = QueryAndResponseUtil.newQueryAndResponse(request);
+		Long queryId = Long.parseLong(ParamUtil.getString(request, "resourcePrimKey"));
+		if (queryId == 0) {
+			throw new PortalException("query id is 0, cannot create response");
+		}
+		r.setParentId(queryId);
+		
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(QueryAndResponse.class.getName(), request);
+		r = QueryAndResponseLocalServiceUtil.addQueryAndResponse(r, r.getUserId(), serviceContext);		
+		QueryAndResponseUtil.eagerFetchDetails(r);
+		
+		request.setAttribute(WebKeys.QUERY_ENTRY,
+				QueryAndResponseLocalServiceUtil.getQueryAndResponse(queryId));
+		request.setAttribute(WebKeys.QUERY_RESPONSE, r);
+		response.setRenderParameter("jspPage", "/edit_response.jsp");
+		
 	}
 	
 }

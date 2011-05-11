@@ -30,7 +30,7 @@
 %>
 
 <div class="queries-list">
-	<liferay-ui:search-container emptyResultsMessage="there-are-no-slogans" delta="20" iteratorURL="<%=iteratorURL %>">
+	<liferay-ui:search-container emptyResultsMessage="there-are-no-queries" delta="20" iteratorURL="<%=iteratorURL %>">
 	<liferay-ui:search-container-results>
 	<%
 		results = QueryAndResponseUtil.getQueries(renderRequest,

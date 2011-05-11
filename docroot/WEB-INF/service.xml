@@ -33,6 +33,10 @@
 			<finder-column name="url" />
 		</finder>
 
+		<finder name="findByParentId" return-type="Collection">
+			<finder-column name="parentId" />
+		</finder>
+
 		<!-- references -->
 
 		<reference package-path="com.liferay.portlet.social" entity="SocialActivity"/>

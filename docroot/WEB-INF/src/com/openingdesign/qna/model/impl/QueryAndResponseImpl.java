@@ -122,4 +122,9 @@ public class QueryAndResponseImpl extends QueryAndResponseModelImpl implements
 		}
 	}
 	
+	public String getHtmlRepresentationShortened() {
+		String s = getHtmlRepresentation();
+		return s.substring(0, Math.min(200, s.length()));
+	}
+	
 }
