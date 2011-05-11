@@ -14,7 +14,15 @@
 
 package com.openingdesign.qna.service.impl;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Date;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -22,6 +30,8 @@ import com.liferay.portal.service.ServiceContext;
 import com.openingdesign.qna.model.QueryAndResponse;
 import com.openingdesign.qna.service.QueryAndResponseLocalServiceUtil;
 import com.openingdesign.qna.service.base.QueryAndResponseLocalServiceBaseImpl;
+import com.openingdesign.qna.util.QueryAndResponseUtil;
+import com.openingdesign.qna.util.RandomPadIdGenerator;
 
 /**
  * The implementation of the query and response local service.
@@ -64,6 +74,7 @@ public class QueryAndResponseLocalServiceImpl extends
 		qnr.setUserId(serviceContext.getUserId());
 		qnr.setCreatedAt(new Date());
 		qnr.setTitle(dto.getTitle());
+		qnr.setUrl(RandomPadIdGenerator.BASE_URL + QueryAndResponseUtil.createNewPadId());
 
 		queryAndResponsePersistence.update(qnr, false);
 
@@ -76,7 +87,27 @@ public class QueryAndResponseLocalServiceImpl extends
 				serviceContext.getAssetCategoryIds(),
 				serviceContext.getAssetTagNames());
 
+		createPad(qnr);
+		
 		return qnr;
+		
+	}
+	
+	private void createPad(QueryAndResponse qnr) throws PortalException {
+	
+		DefaultHttpClient client = new DefaultHttpClient();
+		HttpGet get = new HttpGet(qnr.getUrl() + "?createImmediately=true");
+		System.out.println("CREATE_PAD, URI=" + get.getURI());
+		try {
+			HttpResponse response = client.execute(get);
+			System.out.println("RESPONSE: status_line=" + response.getStatusLine());
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			throw new PortalException("unable to create pad");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new PortalException("unable to create pad");
+		}
 		
 	}
 	

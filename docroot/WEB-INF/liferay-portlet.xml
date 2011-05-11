@@ -7,6 +7,7 @@
 		<icon>/icon.png</icon>
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-css>/sketchspaces-qna-portlet.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>sketchspaces-qna-portlet</css-class-wrapper>
 	</portlet>

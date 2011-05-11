@@ -10,6 +10,8 @@ import javax.portlet.RenderRequest;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.persistence.UserUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.openingdesign.qna.model.QueryAndResponse;
 import com.openingdesign.qna.model.impl.QueryAndResponseImpl;
@@ -17,6 +19,10 @@ import com.openingdesign.qna.service.QueryAndResponseLocalServiceUtil;
 
 public class QueryAndResponseUtil {
 
+	public static String createNewPadId() {
+		return RandomPadIdGenerator.nextPadId();
+	}
+	
 	public static List<QueryAndResponse> getQueries(RenderRequest request, int start, int end) {
 	
 		List<QueryAndResponse> qnrs;
@@ -25,6 +31,14 @@ public class QueryAndResponseUtil {
 		try {
 			// TODO: we should probably use the groupId here? compare the 'slogans' demo portlet.
 			qnrs = QueryAndResponseLocalServiceUtil.getQueryAndResponses(start, end);
+			for (QueryAndResponse qnr : qnrs) {
+				try {
+					qnr.setCreatedByName(UserLocalServiceUtil.getUser(qnr.getUserId()).getFullName());
+				} catch (Exception e) {
+					e.printStackTrace();
+					qnr.setCreatedByName("??");
+				}
+			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 			qnrs = Collections.emptyList();

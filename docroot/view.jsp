@@ -45,7 +45,7 @@
 	<liferay-ui:search-container-row className="com.openingdesign.qna.model.QueryAndResponse" keyProperty="queryId" modelVar="query">
 	
 	<portlet:renderURL windowState="maximized" var="rowURL">
-      <portlet:param name="jspPage" value="/edit_query.jsp" />
+      <portlet:param name="jspPage" value="/view_query.jsp" />
       <portlet:param name="resourcePrimKey" value="<%= String.valueOf(query.getQueryId()) %>" />
       <portlet:param name="redirect" value="<%= currentURL %>" />
     </portlet:renderURL>
