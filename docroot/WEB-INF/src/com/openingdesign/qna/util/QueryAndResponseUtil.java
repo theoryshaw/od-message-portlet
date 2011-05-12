@@ -37,30 +37,18 @@ public class QueryAndResponseUtil {
 		long groupId = themeDisplay.getScopeGroupId();
 		try {
 			// TODO: we should probably use the groupId here? compare the 'slogans' demo portlet.
-		
-			DynamicQuery query = DynamicQueryFactoryUtil.forClass(
-					QueryAndResponse.class,
-					PortalClassLoaderUtil.getClassLoader());
-			query.add(PropertyFactoryUtil.forName("parentId").eq(0L));
-			query.addOrder(OrderFactoryUtil.desc("createdAt"));
-			
-			@SuppressWarnings("rawtypes")
-			List list = QueryAndResponseLocalServiceUtil.dynamicQuery(query, start, end);
-			for (Object o : list) {
-				System.out.println("dynamic query, o=" + o);
-			}
-
-//			qnrs = QueryAndResponseLocalServiceUtil.getQueryAndResponses(start, end);
-			for (Object rawQnr : list) {
-				QueryAndResponse qnr = null;
+			List<QueryAndResponse> rawQnrs = QueryAndResponseLocalServiceUtil.getQueryAndResponses(start, end);
+			for (QueryAndResponse rawQnr : rawQnrs) {
+				if (rawQnr.getParentId() > 0) {
+					continue; // we don't want the responses
+				}
 				try {
-					qnr = (QueryAndResponse) rawQnr;
-					eagerFetchDetails(qnr);
-					qnrs.add(qnr);
+					eagerFetchDetails(rawQnr);
 				} catch (Exception e) {
 					e.printStackTrace();
-					qnr.setCreatedByName("??");
+					rawQnr.setCreatedByName("??");
 				}
+				qnrs.add(rawQnr);
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -75,17 +63,16 @@ public class QueryAndResponseUtil {
 		List<QueryAndResponse> r = new ArrayList<QueryAndResponse>();
 		
 		try {
-			DynamicQuery query = DynamicQueryFactoryUtil.forClass(
-					QueryAndResponse.class,
-					PortalClassLoaderUtil.getClassLoader());
-			query.add(PropertyFactoryUtil.forName("parentId").eq(queryId));
-			query.addOrder(OrderFactoryUtil.desc("createdAt"));
-			
-			@SuppressWarnings("rawtypes")
-			List list = QueryAndResponseLocalServiceUtil.dynamicQuery(query);
-			for (Object raw : list) {
-				eagerFetchDetails((QueryAndResponse) raw);
-				r.add((QueryAndResponse) raw);
+			// TODO: very inefficient!
+			List<QueryAndResponse> rawQnrs = QueryAndResponseLocalServiceUtil
+					.getQueryAndResponses(0, QueryAndResponseLocalServiceUtil
+							.getQueryAndResponsesCount());
+			for (QueryAndResponse raw : rawQnrs) {
+				if (raw.getParentId() != queryId) {
+					continue;
+				}
+				eagerFetchDetails(raw);
+				r.add(raw);
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();

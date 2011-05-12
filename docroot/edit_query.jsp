@@ -38,7 +38,7 @@
 		<aui:input name="queryId" type="hidden" />
 		<h1>The Query</h1>
 		<liferay-ui:error key="title-required" message="title-required" />
-		<aui:input name="title" first="true" autoFocus="true" size="65" />
+		<aui:input name="title" first="true" autoFocus="true" size="85" />
 		<aui:input name="categories" type="assetCategories" />
 		<aui:input name="tags" type="assetTags" />
 

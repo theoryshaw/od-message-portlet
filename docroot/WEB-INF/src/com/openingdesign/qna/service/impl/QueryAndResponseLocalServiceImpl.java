@@ -15,10 +15,9 @@
 package com.openingdesign.qna.service.impl;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Date;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
@@ -61,8 +60,26 @@ import com.openingdesign.qna.util.RandomPadIdGenerator;
 public class QueryAndResponseLocalServiceImpl extends
 		QueryAndResponseLocalServiceBaseImpl {
 
+	
 	public QueryAndResponse addQueryAndResponse(QueryAndResponse dto,
 			long userId, ServiceContext serviceContext) throws SystemException,
+			PortalException {
+		return addQueryAndResponse(dto, userId, serviceContext, null);
+	}
+	
+	/**
+	 * Create a new query (or response), including a pad for the content.
+	 * 
+	 * @param dto
+	 * @param userId
+	 * @param serviceContext
+	 * @param templatePadId If given, the content of the pad will be copied from this template.
+	 * @return
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	public QueryAndResponse addQueryAndResponse(QueryAndResponse dto,
+			long userId, ServiceContext serviceContext, String templatePadId) throws SystemException,
 			PortalException {
 
 		QueryAndResponse qnr = queryAndResponsePersistence
@@ -88,10 +105,23 @@ public class QueryAndResponseLocalServiceImpl extends
 				serviceContext.getAssetCategoryIds(),
 				serviceContext.getAssetTagNames());
 
-		createPad(qnr);
+		if (StringUtils.isEmpty(templatePadId)) {
+			createPad(qnr);
+		} else {
+			createPadFromTemplate(qnr, templatePadId);
+		}
 		
 		return qnr;
 		
+	}
+	
+	public QueryAndResponse addResponseToQuery(QueryAndResponse dto,
+			QueryAndResponse parent, long userId, ServiceContext serviceContext)
+			throws SystemException, PortalException {
+
+		return addQueryAndResponse(dto, userId, serviceContext,
+				parent.getEtherpadId());
+
 	}
 	
 	private void createPad(QueryAndResponse qnr) throws PortalException {
@@ -112,6 +142,28 @@ public class QueryAndResponseLocalServiceImpl extends
 		
 	}
 	
+	private void createPadFromTemplate(QueryAndResponse qnr,
+			String templatePadId) throws PortalException {
+		
+		// /ep/copyPad?old=padId&new=padId
+		String urlText = RandomPadIdGenerator.BASE_URL + "ep/copyPad?old="
+				+ templatePadId + "&new=" + qnr.getEtherpadId();
+		DefaultHttpClient client = new DefaultHttpClient();
+		HttpGet get = new HttpGet(urlText);
+		System.out.println("COPY_PAD, URI=" + get.getURI());
+		try {
+			HttpResponse response = client.execute(get);
+			System.out.println("RESPONSE: status_line=" + response.getStatusLine());
+			
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			throw new PortalException("unable to create pad from template");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new PortalException("unable to create pad from template");
+		}
+	}
+
 	public QueryAndResponse updateQueryAndResponse(QueryAndResponse dto,
 			long userId, ServiceContext sc) throws SystemException, PortalException {
 		

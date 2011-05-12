@@ -114,18 +114,25 @@ public class QNAOnSketchspaces extends MVCPortlet {
 	public void addResponse(ActionRequest request, ActionResponse response) throws PortalException, SystemException {
 		
 		QueryAndResponse r = QueryAndResponseUtil.newQueryAndResponse(request);
-		Long queryId = Long.parseLong(ParamUtil.getString(request, "resourcePrimKey"));
-		if (queryId == 0) {
-			throw new PortalException("query id is 0, cannot create response");
-		}
-		r.setParentId(queryId);
 		
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(QueryAndResponse.class.getName(), request);
-		r = QueryAndResponseLocalServiceUtil.addQueryAndResponse(r, r.getUserId(), serviceContext);		
+		// get the parent (the actual query) and set as parent
+		Long parentId = Long.parseLong(ParamUtil.getString(request, "resourcePrimKey"));
+		if (parentId == 0) {
+			throw new PortalException("parent query id is 0, cannot create response");
+		}
+		QueryAndResponse parent = QueryAndResponseLocalServiceUtil.getQueryAndResponse(parentId);
+		r.setParentId(parentId);
+		
+		// perform the creation in database and create / copy the pad instance
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+				QueryAndResponse.class.getName(), request);
+		r = QueryAndResponseLocalServiceUtil.addResponseToQuery(r, parent,
+				r.getUserId(), serviceContext);
 		QueryAndResponseUtil.eagerFetchDetails(r);
 		
+		// set attributes in request/response
 		request.setAttribute(WebKeys.QUERY_ENTRY,
-				QueryAndResponseLocalServiceUtil.getQueryAndResponse(queryId));
+				QueryAndResponseLocalServiceUtil.getQueryAndResponse(parentId));
 		request.setAttribute(WebKeys.QUERY_RESPONSE, r);
 		response.setRenderParameter("jspPage", "/edit_response.jsp");
 		

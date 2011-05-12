@@ -5,7 +5,9 @@
 		<field name="uuid" type="String" />
 		<field name="queryId" type="long" />
 		<field name="parentId" type="long" />
-		<field name="title" type="String" />
+		<field name="title" type="String">
+			<hint name="max-length">1000</hint>
+		</field>
 		<field name="url" type="String" />
 		<field name="createdAt" type="Date" />
 		<field name="companyId" type="long" />
