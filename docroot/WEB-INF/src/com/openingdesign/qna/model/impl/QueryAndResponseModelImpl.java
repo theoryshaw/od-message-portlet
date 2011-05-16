@@ -69,7 +69,7 @@ public class QueryAndResponseModelImpl extends BaseModelImpl<QueryAndResponse>
 			{ "groupId", new Integer(Types.BIGINT) },
 			{ "userId", new Integer(Types.BIGINT) }
 		};
-	public static final String TABLE_SQL_CREATE = "create table OD_QueryAndResponse (uuid_ VARCHAR(75) null,queryId LONG not null primary key,parentId LONG,title VARCHAR(1000) null,url VARCHAR(75) null,createdAt DATE null,companyId LONG,groupId LONG,userId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table OD_QueryAndResponse (uuid_ VARCHAR(75) null,queryId LONG not null primary key,parentId LONG,title VARCHAR(1000) null,url VARCHAR(1000) null,createdAt DATE null,companyId LONG,groupId LONG,userId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table OD_QueryAndResponse";
 	public static final String ORDER_BY_JPQL = " ORDER BY queryAndResponse.createdAt DESC, queryAndResponse.queryId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY OD_QueryAndResponse.createdAt DESC, OD_QueryAndResponse.queryId ASC";
