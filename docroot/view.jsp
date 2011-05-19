@@ -20,8 +20,16 @@
 			onClick="location.href = '<%=addQueryURL.toString()%>';" />
 	</c:when>
 	<c:otherwise>
-		<div class="sign-in-hint">Sign in to respond to queries, or to
-		add your own.</div>
+		<div class="sign-in-hint">
+		To respond to queries, 
+		<a href="#" onClick="location.href = '<%= themeDisplay.getURLSignIn() %>';">sign in</a>. Or 
+		<a href="#" 
+		onClick="location.href = '<%= themeDisplay.getURLCreateAccount() %>';">create an account</a> first.
+		</div>
+		<div>
+		<input type="button" value="<liferay-ui:message key="create-account" />"
+			onClick="location.href = '<%= themeDisplay.getURLCreateAccount() %>';" />
+		</div>
 	</c:otherwise>
 </c:choose>
 
