@@ -3,6 +3,6 @@
 
 <display>
 	<category name="category.sample">
-		<portlet id="message" />
+		<portlet id="sketchspaces-qna" />
 	</category>
 </display>

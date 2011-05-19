@@ -7,21 +7,31 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
-	<mapped-superclass class="com.alacrity.openingdesign.messageportlet.model.model.impl.SKQuestionModelImpl">
+	<mapped-superclass class="com.openingdesign.qna.model.impl.QueryAndResponseModelImpl">
 		<attributes>
-			<id name="Question_ID" />
-			<basic name="Parent_ID" />
-			<basic name="Title" />
-			<basic name="Url" />
-			<basic name="Post_Date" />
-			<basic name="User_ID" />
+			<id name="queryId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="parentId" />
+			<basic name="title" />
+			<basic name="url" />
+			<basic name="createdAt">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 			<basic name="companyId" />
 			<basic name="groupId" />
+			<basic name="userId" />
 			<transient name="primaryKey" />
+			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
-	<entity class="com.alacrity.openingdesign.messageportlet.model.model.impl.SKQuestionImpl" name="SKQuestion">
-		<table name="SK_SKQuestion" />
-		<attributes />
+	<entity class="com.openingdesign.qna.model.impl.QueryAndResponseImpl" name="QueryAndResponse">
+		<table name="OD_QueryAndResponse" />
+		<attributes>
+			<transient name="categoriesDisplayable" />
+			<transient name="createdByName" />
+			<transient name="queryIdString" />
+		</attributes>
 	</entity>
 </entity-mappings>

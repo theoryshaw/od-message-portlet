@@ -3,13 +3,13 @@
 
 <liferay-portlet-app>
 	<portlet>
-		<portlet-name>message</portlet-name>
+		<portlet-name>sketchspaces-qna</portlet-name>
 		<icon>/icon.png</icon>
 		<instanceable>true</instanceable>
-		<header-portlet-css>/messagePortletLayout.css</header-portlet-css>
-		<header-portlet-javascript>http://code.jquery.com/jquery-1.6.min.js</header-portlet-javascript>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-css>/sketchspaces-qna-portlet.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>message-portlet</css-class-wrapper>
+		<css-class-wrapper>sketchspaces-qna-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

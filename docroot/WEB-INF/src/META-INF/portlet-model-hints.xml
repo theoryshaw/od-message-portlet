@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <model-hints>
-	<model name="com.alacrity.openingdesign.messageportlet.model.model.SKQuestion">
-		<field name="Question_ID" type="long" />
-		<field name="Parent_ID" type="long" />
-		<field name="Title" type="String" />
-		<field name="Url" type="String">
-			<hint name="max-length">4000</hint>
+	<model name="com.openingdesign.qna.model.QueryAndResponse">
+		<field name="uuid" type="String" />
+		<field name="queryId" type="long" />
+		<field name="parentId" type="long" />
+		<field name="title" type="String">
+			<hint name="max-length">1000</hint>
 		</field>
-		<field name="Post_Date" type="long" />
-		<field name="User_ID" type="long" />
+		<field name="url" type="String">
+			<hint name="max-length">1000</hint>
+		</field>
+		<field name="createdAt" type="Date" />
 		<field name="companyId" type="long" />
 		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
 	</model>
 </model-hints>

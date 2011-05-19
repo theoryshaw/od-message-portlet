@@ -1,167 +1,82 @@
+<%@page import="com.openingdesign.qna.util.QueryAndResponseUtil"%>
+<%@page import="com.openingdesign.qna.service.QueryAndResponseLocalServiceUtil"%>
+<%@page import="javax.portlet.RenderResponse"%>
+<%@include file="/init.jsp" %>
+
+<liferay-ui:header
+  title="Queries and Responses"
+/>
+
+<portlet:renderURL var="addQueryURL">
+  <portlet:param name="jspPage" value="/edit_query.jsp" />
+</portlet:renderURL>
+
+<% // ARGHH! The condition below should use the permissionChecker, see slogan example, but then even if
+// the role gets assigned to the user accessing the portlet, the user does not have permission :( %>
+<c:choose>
+	<c:when
+		test='<%= user != null && user.getFullName() != null && user.getFullName().length() > 1 %>'>
+		<input type="button" value="<liferay-ui:message key="add-query" />"
+			onClick="location.href = '<%=addQueryURL.toString()%>';" />
+	</c:when>
+	<c:otherwise>
+		<div class="sign-in-hint">
+		To respond to queries, 
+		<a href="#" onClick="location.href = '<%= themeDisplay.getURLSignIn() %>';">sign in</a>. Or 
+		<a href="#" 
+		onClick="location.href = '<%= themeDisplay.getURLCreateAccount() %>';">create an account</a> first.
+		</div>
+	</c:otherwise>
+</c:choose>
+
 <%
-/**
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- */
+	PortletURL iteratorURL = renderResponse.createRenderURL();
 %>
 
-<%@ page import="com.alacrity.openingdesign.messageportlet.model.service.SKQuestionLocalServiceUtil,
-                com.alacrity.openingdesign.messageportlet.model.model.SKQuestion,
-                java.util.Collection,
-                java.util.Date,
-                java.text.SimpleDateFormat,
-                com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil,
-                com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil,
-                com.liferay.portal.kernel.dao.orm.OrderFactoryUtil,
-                com.liferay.portal.kernel.dao.orm.DynamicQuery,
-                com.liferay.portal.model.User,
-                com.liferay.portal.service.UserLocalServiceUtil,
-                com.alacrity.openingdesign.messageportlet.resources.PageNavigationManager" %>
-
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-
-
-<jsp:useBean class="java.lang.String" id="createThreadURL" scope="request" />
-<jsp:useBean class="java.lang.String" id="viewThreadURL" scope="request" />
-<jsp:useBean class="java.lang.String" id="message" scope="request" />
-<jsp:useBean class="java.lang.String" id="pageStart" scope="request" />
-<jsp:useBean class="java.lang.String" id="pageEnd" scope="request" />
-<jsp:useBean class="java.lang.String" id="pageURL" scope="request" />
-<jsp:useBean class="java.lang.String" id="userTime" scope="request" />
-<jsp:useBean class="java.lang.String" id="serverTime" scope="request" />
-
-<portlet:defineObjects />
-
-<h2><%=message %></h2>
-
-<form id = "<portlet:namespace />createThread"
-action="<%=createThreadURL %>"
-method="post">
-<input type=submit value="Post new Query">
-</form>
-<br>
-<%
-
-int start=Integer.parseInt(pageStart);
-int end=Integer.parseInt(pageEnd);
-
-DynamicQuery query = DynamicQueryFactoryUtil.forClass(SKQuestion.class)
-.add(PropertyFactoryUtil.forName("Parent_ID").eq(new Long(0L)))
-.addOrder(OrderFactoryUtil.desc("Post_Date"));
-
-final long maxItems = SKQuestionLocalServiceUtil.getService().dynamicQueryCount(query);
-
-query = DynamicQueryFactoryUtil.forClass(SKQuestion.class)
-.add(PropertyFactoryUtil.forName("Parent_ID").eq(new Long(0L)))
-.addOrder(OrderFactoryUtil.desc("Post_Date"));
-
-Collection<SKQuestion> questions = SKQuestionLocalServiceUtil.getService().dynamicQuery(query,start,end+1);
-%>
-
-
-<%
-
-SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy hh:mm");
-
-if (questions.size()==0){
-    out.print("No questions exist");
-} else { %>
-<table class=threadsTable>
-    <tr>
-        <th>Title</th>
-        <th>Created By</th>
-        <th>Created At</th>
-        <th></th>
-    </tr>
-<%
-for (SKQuestion cur : questions){
+<div class="queries-list">
+	<liferay-ui:search-container emptyResultsMessage="there-are-no-queries" delta="20" iteratorURL="<%=iteratorURL %>">
+	<liferay-ui:search-container-results>
+	<%
+		results = QueryAndResponseUtil.getQueries(renderRequest,
+						searchContainer.getStart(),
+						searchContainer.getEnd());
+				total = QueryAndResponseUtil.getQueriesCount(renderRequest);
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+	%>
+	</liferay-ui:search-container-results>
+	
+	<liferay-ui:search-container-row className="com.openingdesign.qna.model.QueryAndResponse" keyProperty="queryId" modelVar="query">
+	
+	<portlet:renderURL windowState="maximized" var="rowURL">
+      <portlet:param name="jspPage" value="/view_query.jsp" />
+      <portlet:param name="resourcePrimKey" value="<%= String.valueOf(query.getQueryId()) %>" />
+      <portlet:param name="redirect" value="<%= currentURL %>" />
+    </portlet:renderURL>
     
-    User user = UserLocalServiceUtil.getUserById(cur.getUser_ID());
-%>
-    <tr>
-        <td><% out.print(cur.getTitle()); %></td>
-        <td><% out.print(user.getFullName()); %></td>
-        <td><% long postDate = cur.getPost_Date(); out.print(format.format(
-        		new Date(
-        				postDate
-        						+ Integer.parseInt(userTime) 
-        						- Integer.parseInt(serverTime)
-        						))); %></td>
-        <td>
-            <form id = "<portlet:namespace />viewThread<%out.print(cur.getPrimaryKey());%>"
-                action="<%=viewThreadURL %>"
-                method="post">
-                <input type=hidden name=threadId value=<%out.print(cur.getPrimaryKey());%> />
-                <input type=submit value="Open" />
-            </form>
-        </td>
-    </tr>
-    
-<%
-}
-%></table><%
-}
-%>
+    <liferay-ui:search-container-column-text
+      name="query-date"
+      property="createdAt"
+      orderable="<%=false %>" />
 
-<div class="navigation">
-<form id = "<portlet:namespace />changePage"
-action="<%=pageURL %>"
-method="post">
-<%
-final int pagesLeftRight=3;
+    <liferay-ui:search-container-column-text
+      name="created-by"
+      property="createdByName"
+      orderable="<%=false %>" />
 
-final int currentPage = PageNavigationManager.calculateCurrentPage(start,end);
-final int lastPage = PageNavigationManager.calculateNumberOfPages(start,end,maxItems);
-
-final int startPage=currentPage-pagesLeftRight>0?currentPage-pagesLeftRight:1;
-final int endPage=currentPage+pagesLeftRight<=lastPage?currentPage+pagesLeftRight:lastPage;
-
-if(PageNavigationManager.isTherePreviousPages(start,end)){
-    %>
-    <input type=submit name='pageNumber' value="<%=com.alacrity.openingdesign.messageportlet.modes.Mode.FIRST_PAGE_BUTTON_TEXT %>" />
-    <input type=submit name='pageNumber' value="<%=com.alacrity.openingdesign.messageportlet.modes.Mode.PREVIOUS_PAGE_BUTTON_TEXT %>" />
-    <%
-}
-
-for (int r=startPage;r<currentPage;r++){
-    %>
-           <input type=submit name='pageNumber' value=<%=r %> />
-    <%
-}
-
-%>
-        <span>&nbsp;<%=currentPage %>&nbsp;</span>
-<%
-
-for (int r=currentPage+1;r<=endPage;r++){
-    %>
-        <input type=submit name='pageNumber' value=<%=r %> />
-    <%
-}
-
-if (PageNavigationManager.isThereNextPages(start,end,maxItems)){
-%>
-
-    <input type=submit name='pageNumber' value="<%=com.alacrity.openingdesign.messageportlet.modes.Mode.NEXT_PAGE_BUTTON_TEXT %>" />
-    <input type=submit name='pageNumber' value="<%=com.alacrity.openingdesign.messageportlet.modes.Mode.LAST_PAGE_BUTTON_TEXT %>" />
-<%
-}
-%>
-<input type=hidden name=page value=<%=currentPage %> />
-<input type=hidden name=lastPage value=<%=lastPage %> />
-</form>
+    <liferay-ui:search-container-column-text
+      href="<%=rowURL %>"
+        name="title"
+        property="title"
+        orderable="<%= true %>"
+        />
+	
+	<liferay-ui:search-container-column-text
+      name="categories"
+      property="categoriesDisplayable" />
+      
+	</liferay-ui:search-container-row>
+	<liferay-ui:search-iterator />
+	</liferay-ui:search-container>
 </div>
-<div class="serverTime">
-Server Time: <%=format.format(new Date().getTime()+(Integer.parseInt(serverTime)*60*60*1000)) %>
-</div>
-
 
