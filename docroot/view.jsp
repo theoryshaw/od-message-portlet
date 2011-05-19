@@ -26,10 +26,6 @@
 		<a href="#" 
 		onClick="location.href = '<%= themeDisplay.getURLCreateAccount() %>';">create an account</a> first.
 		</div>
-		<div>
-		<input type="button" value="<liferay-ui:message key="create-account" />"
-			onClick="location.href = '<%= themeDisplay.getURLCreateAccount() %>';" />
-		</div>
 	</c:otherwise>
 </c:choose>
 
