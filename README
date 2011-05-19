@@ -1,2 +1,15 @@
 Sketchspaces Q&A portlet: Enables Q&A-like discussions, using etherpad instances
 as medium.
+
+HOW TO BUILD
+============
+
+* follow the book "Liferay in Action"
+* pull this portlet from github and (IMPORTANT!) rename the folder
+  to
+	sketchspaces-qna-portlet
+* then, inside the folder, build the service:
+	ant build-service
+* build and deploy:
+	ant
+
